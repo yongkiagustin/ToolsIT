@@ -30,7 +30,8 @@ public class MainFrame extends javax.swing.JFrame {
         jLabelNotif.setVisible(false);
     }
     public String so = "";
-    public int statusOrder;
+    public int statusOrderSebelum = 15;
+    public int statusOrderSesudah = 15;
     public String tableOrder = "";
 
     /**
@@ -45,8 +46,7 @@ public class MainFrame extends javax.swing.JFrame {
         buttonGroup = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         main_panel = new javax.swing.JPanel();
         panel_cek_log_send = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -70,40 +70,30 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tools IT");
-        setLocation(new java.awt.Point(70, 50));
+        setLocation(new java.awt.Point(100, 100));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
-        jButton1.setText("Edit Status SO");
-
-        jButton4.setText("Cek Log Send File");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+        jLabel5.setText("Version 1.0");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGap(76, 76, 76)
+                .addComponent(jLabel5)
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(120, 120, 120)
-                .addComponent(jButton4)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addContainerGap())
         );
 
         main_panel.setBackground(new java.awt.Color(153, 153, 153));
@@ -335,8 +325,9 @@ public class MainFrame extends javax.swing.JFrame {
             LogSendFiles sendFiles;
 
             if (rs.next() == false) {
-                System.out.println("falselog");
                 jLabelNotif.setVisible(true);
+                label_status_so_sebelum.setText("");
+                label_status_so_sesudah.setText("");
             } else {
                 do {
                     System.out.println("truelog");
@@ -350,6 +341,8 @@ public class MainFrame extends javax.swing.JFrame {
             System.out.println("Database connected!");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Gagal koneksi ke database!");
+            label_status_so_sebelum.setText("");
+            label_status_so_sesudah.setText("");
         }
         return logFileList;
     }
@@ -372,9 +365,9 @@ public class MainFrame extends javax.swing.JFrame {
 //String password = "t8c4cX7aKJe97F6h";
 
     ArrayList<StatusSO> statusSO() {
-        String url = "jdbc:mysql://localhost/coba_api?zeroDateTimeBehavior=convertToNull";
-        String username = "root";
-        String password = "";
+        String url = "jdbc:mysql://192.168.200.248/jonas_db?zeroDateTimeBehavior=convertToNull";
+        String username = "jonas";
+        String password = "t8c4cX7aKJe97F6h";
 
         ArrayList<StatusSO> statusSOList = new ArrayList<>();
         try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -384,7 +377,10 @@ public class MainFrame extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery(queryRead);
             StatusSO statusSO;
             if (rs.next() == false) {
+                jLabelNotif.setText("SO Tidak Ditemukan!");
                 jLabelNotif.setVisible(true);
+                label_status_so_sebelum.setText("");
+                label_status_so_sesudah.setText("");
             }
             // rs.first();
             do {
@@ -395,27 +391,37 @@ public class MainFrame extends javax.swing.JFrame {
                         rs.getString("so_number"));
                 statusSOList.add(statusSO);
             } while (rs.next() == true);
-            
+
         } catch (SQLException e) {
             label_status_so_sebelum.setText("");
+            label_status_so_sesudah.setText("");
             JOptionPane.showMessageDialog(null, e);
         }
         return statusSOList;
     }
 
-    public void show_statusSO() {
+    public void get_statusSOSebelum() {
         ArrayList<StatusSO> list = statusSO();
 
         for (int i = 0; i < list.size(); i++) {
-            statusOrder = list.get(i).getStatus_order();
+            statusOrderSebelum = list.get(i).getStatus_order();
         }
 
     }
 
-    public void show_labelStatus() {
+    public void get_statusSOSesudah() {
+        ArrayList<StatusSO> list = statusSO();
+
+        for (int i = 0; i < list.size(); i++) {
+            statusOrderSesudah = list.get(i).getStatus_order();
+        }
+
+    }
+
+    public void show_labelStatusSebelum() {
         if (jRadio_os.isSelected()) {
 
-            switch (statusOrder) {
+            switch (statusOrderSebelum) {
                 case 0:
                     label_status_so_sebelum.setText("New");
                     break;
@@ -451,18 +457,21 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
                 case 11:
                     label_status_so_sebelum.setText("Receive On Store");
-                    
+
                     break;
                 case 12:
                     label_status_so_sebelum.setText("Closed");
-                    
+
                     break;
                 case 13:
                     label_status_so_sebelum.setText("Cancel");
                     break;
+                case 15:
+                    label_status_so_sesudah.setText("");
+                    break;
             }
         } else {
-            switch (statusOrder) {
+            switch (statusOrderSebelum) {
 
                 case 1:
                     label_status_so_sebelum.setText("New");
@@ -480,7 +489,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                 case 11:
                     label_status_so_sebelum.setText("On Delivery To Store");
-                
+
                     break;
                 case 12:
                     label_status_so_sebelum.setText("Received On Store");
@@ -490,6 +499,100 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
                 case 14:
                     label_status_so_sebelum.setText("Cancell");
+                    break;
+                case 15:
+                    label_status_so_sesudah.setText("");
+                    break;
+
+            }
+
+        }
+    }
+
+    public void show_labelStatusSesudah() {
+        if (jRadio_os.isSelected()) {
+
+            switch (statusOrderSesudah) {
+                case 0:
+                    label_status_so_sesudah.setText("New");
+                    break;
+                case 1:
+                    label_status_so_sesudah.setText("Checkin");
+                    break;
+                case 2:
+                    label_status_so_sesudah.setText("Called/On studio fotografer");
+                    break;
+                case 3:
+                    label_status_so_sesudah.setText("Pending");
+                    break;
+                case 4:
+                    label_status_so_sesudah.setText("Finish Photoshoot");
+                    break;
+                case 5:
+                    label_status_so_sesudah.setText("Previewed");
+                    break;
+                case 6:
+                    label_status_so_sesudah.setText("Paid");
+                    break;
+                case 7:
+                    label_status_so_sesudah.setText("DP");
+                    break;
+                case 8:
+                    label_status_so_sesudah.setText("On Production");
+                    break;
+                case 9:
+                    label_status_so_sesudah.setText("Finish Production");
+                    break;
+                case 10:
+                    label_status_so_sesudah.setText("On delivery to store");
+                    break;
+                case 11:
+                    label_status_so_sesudah.setText("Receive On Store");
+
+                    break;
+                case 12:
+                    label_status_so_sesudah.setText("Closed");
+
+                    break;
+                case 13:
+                    label_status_so_sesudah.setText("Cancel");
+                    break;
+                case 15:
+                    label_status_so_sesudah.setText("");
+                    break;
+            }
+        } else {
+            switch (statusOrderSesudah) {
+
+                case 1:
+                    label_status_so_sesudah.setText("New");
+                    break;
+
+                case 7:
+                    label_status_so_sesudah.setText("Paid");
+                    break;
+                case 8:
+                    label_status_so_sesudah.setText("On Production");
+                    break;
+                case 9:
+                    label_status_so_sesudah.setText("Finish Production");
+                    break;
+
+                case 11:
+                    label_status_so_sesudah.setText("On Delivery To Store");
+
+                    break;
+                case 12:
+                    label_status_so_sesudah.setText("Received On Store");
+                    break;
+                case 13:
+                    label_status_so_sesudah.setText("Closed");
+                    break;
+                case 14:
+                    label_status_so_sesudah.setText("Cancell");
+                    break;
+                case 15:
+                    label_status_so_sesudah.setText("");
                     break;
             }
 
@@ -505,65 +608,70 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void btn_cek_statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cek_statusActionPerformed
-        jLabelNotif.setVisible(false);
-
-        so = jTextField_so.getText().toUpperCase().toString();
-        show_statusSO();
-        show_labelStatus();
-    }//GEN-LAST:event_btn_cek_statusActionPerformed
-
-    private void btn_ganti_statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ganti_statusActionPerformed
-        jLabelNotif.setVisible(false);
-        so = jTextField_so.getText().toUpperCase().toString();
-        String url = "jdbc:mysql://localhost/coba_api?zeroDateTimeBehavior=convertToNull";
-        String username = "root";
-        String password = "";
-        //String password = "t8c4cX7aKJe97F6h";
+    public void QueryGantiStatus() {
+        String url = "jdbc:mysql://192.168.200.248/jonas_db?zeroDateTimeBehavior=convertToNull";
+        String username = "jonas";
+//        String password = "";
+        String password = "t8c4cX7aKJe97F6h";
         validateTable();
 
         int select = jCombo_status.getSelectedIndex();
+
         if (select == 0) {
+            get_statusSOSebelum();
             try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
 
                 //update status
-                String queryUpdate = "UPDATE coba_api." + tableOrder + " SET status_order = 8 where so_number='" + so + "'";
+                String queryUpdate = "UPDATE jonas_db." + tableOrder + " SET status_order = 8 where so_number='" + so + "'";
                 Statement st = connection.prepareStatement(queryUpdate);
                 st.execute(queryUpdate);
                 JOptionPane.showMessageDialog(null, "Berhasil, Silahkan Lakukan Finish Production di JOM V3");
-
-                ArrayList<StatusSO> list = statusSO();
-                for (int i = 0; i < list.size(); i++) {
-                    statusOrder = list.get(i).getStatus_order();
-                }
-                System.out.println(statusOrder);
-                show_labelStatus();
-
+                get_statusSOSesudah();
+                show_labelStatusSebelum();
+                show_labelStatusSesudah();
             } catch (SQLException ex) {
+                label_status_so_sebelum.setText("");
+                label_status_so_sesudah.setText("");
                 JOptionPane.showMessageDialog(null, ex);
             }
 
         } else if (select == 1) {
             try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
                 //update status
-                String queryUpdate = "UPDATE coba_api." + tableOrder + " SET status_order = " + statusOrder + " where so_number='" + so + "'";
+                String queryUpdate = "UPDATE jonas_db." + tableOrder + " SET status_order = " + statusOrderSebelum + " where so_number='" + so + "'";
                 Statement st = connection.prepareStatement(queryUpdate);
                 st.execute(queryUpdate);
                 JOptionPane.showMessageDialog(null, "Status Berhasil Dikembalikan!");
-
+                statusOrderSebelum = 15;
+                get_statusSOSesudah();
+                show_labelStatusSesudah();
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "gagal ganti status, Cek Koneksi atau ganti type SO!");
+                label_status_so_sebelum.setText("");
+                label_status_so_sesudah.setText("");
+                JOptionPane.showMessageDialog(null, ex);
             }
         }
+    }
+    private void btn_cek_statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cek_statusActionPerformed
+        jLabelNotif.setVisible(false);
+
+        so = jTextField_so.getText().toUpperCase().toString();
+        get_statusSOSesudah();
+        show_labelStatusSesudah();
+    }//GEN-LAST:event_btn_cek_statusActionPerformed
+
+    private void btn_ganti_statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ganti_statusActionPerformed
+        jLabelNotif.setVisible(false);
+        label_status_so_sebelum.setText("");
+        so = jTextField_so.getText().toUpperCase().toString();
+        QueryGantiStatus();
 
     }//GEN-LAST:event_btn_ganti_statusActionPerformed
 
     private void btn_cek_logActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cek_logActionPerformed
         jLabelNotif.setVisible(false);
+        label_status_so_sebelum.setText("");
+        label_status_so_sesudah.setText("");
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
         while (model.getRowCount() > 0) {
             model.removeRow(0);
@@ -614,13 +722,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btn_cek_status;
     private javax.swing.JButton btn_ganti_status;
     private javax.swing.ButtonGroup buttonGroup;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jCombo_status;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelNotif;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
