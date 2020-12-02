@@ -62,7 +62,9 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabelNotif = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        label_status_so = new javax.swing.JLabel();
+        label_status_so_sebelum = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        label_status_so_sesudah = new javax.swing.JLabel();
         panel_edit_so = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
 
@@ -167,7 +169,9 @@ public class MainFrame extends javax.swing.JFrame {
         jLabelNotif.setForeground(new java.awt.Color(204, 0, 0));
         jLabelNotif.setText("*so tidak ada di Log Send File");
 
-        jLabel2.setText("Status SO :");
+        jLabel2.setText("Status Sebelum :");
+
+        jLabel4.setText("Status Sesudah :");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -195,13 +199,16 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(btn_cek_status, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(label_status_so, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelNotif)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelNotif)
-                            .addComponent(jLabel2))
-                        .addGap(0, 70, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(label_status_so_sebelum, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(label_status_so_sesudah, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,9 +223,13 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(btn_cek_log, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField_so, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(label_status_so_sebelum, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(label_status_so, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(label_status_so_sesudah, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_ganti_status, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,7 +273,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panel_edit_soLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addContainerGap(602, Short.MAX_VALUE))
+                .addContainerGap(605, Short.MAX_VALUE))
         );
         panel_edit_soLayout.setVerticalGroup(
             panel_edit_soLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,7 +293,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(main_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+                .addComponent(main_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -327,13 +338,14 @@ public class MainFrame extends javax.swing.JFrame {
                 System.out.println("falselog");
                 jLabelNotif.setVisible(true);
             } else {
-                while (rs.next()) {
+                do {
                     System.out.println("truelog");
                     sendFiles = new LogSendFiles(rs.getString("so_number"),
                             rs.getString("real_name"),
                             rs.getInt("photo_status"));
                     logFileList.add(sendFiles);
-                }
+                } while (rs.next() == true);
+
             }
             System.out.println("Database connected!");
         } catch (SQLException e) {
@@ -357,11 +369,13 @@ public class MainFrame extends javax.swing.JFrame {
             model.addRow(row);
         }
     }
+//String password = "t8c4cX7aKJe97F6h";
 
     ArrayList<StatusSO> statusSO() {
-        String url = "jdbc:mysql://192.168.200.248/jonas_db?zeroDateTimeBehavior=convertToNull";
-        String username = "jonas";
-        String password = "t8c4cX7aKJe97F6h";
+        String url = "jdbc:mysql://localhost/coba_api?zeroDateTimeBehavior=convertToNull";
+        String username = "root";
+        String password = "";
+
         ArrayList<StatusSO> statusSOList = new ArrayList<>();
         try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
             validateTable();
@@ -369,32 +383,33 @@ public class MainFrame extends javax.swing.JFrame {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(queryRead);
             StatusSO statusSO;
-
-            while (rs.next()) {
+            if (rs.next() == false) {
+                jLabelNotif.setVisible(true);
+            }
+            // rs.first();
+            do {
                 System.out.println("truelog");
                 statusSO = new StatusSO(
                         rs.getInt("id"),
                         rs.getInt("status_order"),
                         rs.getString("so_number"));
                 statusSOList.add(statusSO);
-            }
-
-            System.out.println("Database ini connected!");
+            } while (rs.next() == true);
+            
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Gagal koneksi ke database, salah type SO atau salah SO");
+            label_status_so_sebelum.setText("");
+            JOptionPane.showMessageDialog(null, e);
         }
         return statusSOList;
     }
 
     public void show_statusSO() {
         ArrayList<StatusSO> list = statusSO();
-        
+
         for (int i = 0; i < list.size(); i++) {
-            
             statusOrder = list.get(i).getStatus_order();
         }
-        
-        show_labelStatus();
+
     }
 
     public void show_labelStatus() {
@@ -402,79 +417,79 @@ public class MainFrame extends javax.swing.JFrame {
 
             switch (statusOrder) {
                 case 0:
-                    label_status_so.setText("New");
+                    label_status_so_sebelum.setText("New");
                     break;
                 case 1:
-                    label_status_so.setText("Checkin");
+                    label_status_so_sebelum.setText("Checkin");
                     break;
                 case 2:
-                    label_status_so.setText("Called/On studio fotografer");
+                    label_status_so_sebelum.setText("Called/On studio fotografer");
                     break;
                 case 3:
-                    label_status_so.setText("Pending");
+                    label_status_so_sebelum.setText("Pending");
                     break;
                 case 4:
-                    label_status_so.setText("Finish Photoshoot");
+                    label_status_so_sebelum.setText("Finish Photoshoot");
                     break;
                 case 5:
-                    label_status_so.setText("Previewed");
+                    label_status_so_sebelum.setText("Previewed");
                     break;
                 case 6:
-                    label_status_so.setText("Paid");
+                    label_status_so_sebelum.setText("Paid");
                     break;
                 case 7:
-                    label_status_so.setText("DP");
+                    label_status_so_sebelum.setText("DP");
                     break;
                 case 8:
-                    label_status_so.setText("On Production");
+                    label_status_so_sebelum.setText("On Production");
                     break;
                 case 9:
-                    label_status_so.setText("Finish Production");
+                    label_status_so_sebelum.setText("Finish Production");
                     break;
                 case 10:
-                    label_status_so.setText("On delivery to store");
+                    label_status_so_sebelum.setText("On delivery to store");
                     break;
                 case 11:
-                    label_status_so.setText("Receive On Store");
-                    System.out.println("");
+                    label_status_so_sebelum.setText("Receive On Store");
+                    
                     break;
                 case 12:
-                    label_status_so.setText("Closed");
-                    System.out.println("Closed");
+                    label_status_so_sebelum.setText("Closed");
+                    
                     break;
                 case 13:
-                    label_status_so.setText("Cancel");
+                    label_status_so_sebelum.setText("Cancel");
                     break;
             }
         } else {
             switch (statusOrder) {
 
                 case 1:
-                    label_status_so.setText("New");
+                    label_status_so_sebelum.setText("New");
                     break;
 
                 case 7:
-                    label_status_so.setText("Paid");
+                    label_status_so_sebelum.setText("Paid");
                     break;
                 case 8:
-                    label_status_so.setText("On Production");
+                    label_status_so_sebelum.setText("On Production");
                     break;
                 case 9:
-                    label_status_so.setText("Finish Production");
+                    label_status_so_sebelum.setText("Finish Production");
                     break;
 
                 case 11:
-                    label_status_so.setText("On Delivery To Store");
-                    System.out.println("");
+                    label_status_so_sebelum.setText("On Delivery To Store");
+                
                     break;
                 case 12:
-                    label_status_so.setText("Received On Store");
+                    label_status_so_sebelum.setText("Received On Store");
                     break;
                 case 13:
-                    label_status_so.setText("Closed");
+                    label_status_so_sebelum.setText("Closed");
                     break;
                 case 14:
-                    label_status_so.setText("Cancell");
+                    label_status_so_sebelum.setText("Cancell");
                     break;
             }
 
@@ -499,14 +514,16 @@ public class MainFrame extends javax.swing.JFrame {
 
         so = jTextField_so.getText().toUpperCase().toString();
         show_statusSO();
+        show_labelStatus();
     }//GEN-LAST:event_btn_cek_statusActionPerformed
 
     private void btn_ganti_statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ganti_statusActionPerformed
         jLabelNotif.setVisible(false);
         so = jTextField_so.getText().toUpperCase().toString();
-        String url = "jdbc:mysql://192.168.200.248/jonas_demo_v1?zeroDateTimeBehavior=convertToNull";
-        String username = "jonas";
-        String password = "t8c4cX7aKJe97F6h";
+        String url = "jdbc:mysql://localhost/coba_api?zeroDateTimeBehavior=convertToNull";
+        String username = "root";
+        String password = "";
+        //String password = "t8c4cX7aKJe97F6h";
         validateTable();
 
         int select = jCombo_status.getSelectedIndex();
@@ -514,7 +531,7 @@ public class MainFrame extends javax.swing.JFrame {
             try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
 
                 //update status
-                String queryUpdate = "UPDATE jonas_demo_v1." + tableOrder + " SET status_order = 8 where so_number='" + so + "'";
+                String queryUpdate = "UPDATE coba_api." + tableOrder + " SET status_order = 8 where so_number='" + so + "'";
                 Statement st = connection.prepareStatement(queryUpdate);
                 st.execute(queryUpdate);
                 JOptionPane.showMessageDialog(null, "Berhasil, Silahkan Lakukan Finish Production di JOM V3");
@@ -527,13 +544,13 @@ public class MainFrame extends javax.swing.JFrame {
                 show_labelStatus();
 
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "gagal ganti status, Cek Koneksi atau ganti type SO!");
+                JOptionPane.showMessageDialog(null, ex);
             }
 
         } else if (select == 1) {
             try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
                 //update status
-                String queryUpdate = "UPDATE jonas_demo_v1." + tableOrder + " SET status_order = " + statusOrder + " where so_number='" + so + "'";
+                String queryUpdate = "UPDATE coba_api." + tableOrder + " SET status_order = " + statusOrder + " where so_number='" + so + "'";
                 Statement st = connection.prepareStatement(queryUpdate);
                 st.execute(queryUpdate);
                 JOptionPane.showMessageDialog(null, "Status Berhasil Dikembalikan!");
@@ -603,6 +620,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelNotif;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -612,7 +630,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;
     private javax.swing.JTextField jTextField_so;
-    private javax.swing.JLabel label_status_so;
+    private javax.swing.JLabel label_status_so_sebelum;
+    private javax.swing.JLabel label_status_so_sesudah;
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel panel_cek_log_send;
     private javax.swing.JPanel panel_edit_so;
