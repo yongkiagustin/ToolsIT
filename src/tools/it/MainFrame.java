@@ -77,7 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
-        jLabel5.setText("Version 1.0");
+        jLabel5.setText("Version 1.1");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -121,6 +121,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (jTable.getColumnModel().getColumnCount() > 0) {
             jTable.getColumnModel().getColumn(0).setMinWidth(50);
             jTable.getColumnModel().getColumn(0).setMaxWidth(50);
+            jTable.getColumnModel().getColumn(2).setPreferredWidth(150);
         }
 
         btn_cek_status.setText("Cek Status SO");
@@ -304,9 +305,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -354,11 +353,28 @@ public class MainFrame extends javax.swing.JFrame {
         Object[] row = new Object[4];
 
         for (int i = 0; i < list.size(); i++) {
+            String photoStatus = "";
+            int getPhotoStatus = list.get(i).getPhoto_status();
+            switch (getPhotoStatus) {
+                case 0:
+                    photoStatus = "On Queue";
+                    break;
+                case 1:
+                    photoStatus = "On Progress";
+                    break;
+                case 2:
+                    photoStatus = "Success";
+                    break;
+                case 3:
+                    photoStatus = "Failed";
+                    break;
+            }
+
             int jmlRow = model.getRowCount();
             row[0] = jmlRow + 1;
             row[1] = list.get(i).getSo_number();
             row[2] = list.get(i).getReal_name();
-            row[3] = list.get(i).getPhoto_status();
+            row[3] = photoStatus;
             model.addRow(row);
         }
     }
