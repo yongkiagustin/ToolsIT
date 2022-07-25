@@ -17,21 +17,13 @@ class LogSendFiles {
     private int photo_status;
     
     
-    public LogSendFiles(String so_number, String real_name, int photo_status ){
-        this.so_number = so_number;
+    public LogSendFiles(String real_name, int photo_status ){
+        
         this.real_name = real_name;
         this.photo_status = photo_status;
        
         
       
-    }
-
-    public String getSo_number() {
-        return so_number;
-    }
-
-    public void setSo_number(String so_number) {
-        this.so_number = so_number;
     }
 
     public String getReal_name() {

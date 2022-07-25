@@ -5,10 +5,9 @@
  */
 package tools.it;
 
-import static com.sun.javafx.css.SizeUnits.PC;
 import java.sql.SQLException;
 import javax.swing.UIManager;
-import sun.rmi.runtime.Log;
+
 
 /**
  *
@@ -34,7 +33,7 @@ public class ToolsIT {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ToolsIT.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        MainFrame mainframe = new MainFrame();
-        mainframe.setVisible(true);
+        MainMenu mainmenu = new MainMenu();
+        mainmenu.setVisible(true);
     }
 }

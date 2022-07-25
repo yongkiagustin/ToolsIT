@@ -13,21 +13,24 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Young
  */
-public class MainFrame extends javax.swing.JFrame {
+public class FrameLogSendFile extends javax.swing.JFrame {
 
     /**
      * Creates new form MainFrame
      */
-    public MainFrame() {
+    public FrameLogSendFile() {
 
         initComponents();
         jLabelNotif.setVisible(false);
+        label_foto_upload.setVisible(false);
+        label_waktu_dikirim.setVisible(false);
     }
     public String so = "";
     public int statusOrderSebelum = 15;
@@ -45,8 +48,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         buttonGroup = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
         main_panel = new javax.swing.JPanel();
         panel_cek_log_send = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -56,45 +57,26 @@ public class MainFrame extends javax.swing.JFrame {
         btn_ganti_status = new javax.swing.JButton();
         jCombo_status = new javax.swing.JComboBox<>();
         btn_cek_log = new javax.swing.JButton();
-        jTextField_so = new javax.swing.JTextField();
+        tf_so = new javax.swing.JTextField();
         jRadio_op = new javax.swing.JRadioButton();
         jRadio_os = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         jLabelNotif = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        label_status_sebelum = new javax.swing.JLabel();
         label_status_so_sebelum = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        label_status_sesudah = new javax.swing.JLabel();
         label_status_so_sesudah = new javax.swing.JLabel();
-        panel_edit_so = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        label_waktu_dikirim = new javax.swing.JLabel();
+        label_foto_upload = new javax.swing.JLabel();
+        btn_history_upload = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tools IT");
         setLocation(new java.awt.Point(100, 100));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
-
-        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
-
-        jLabel5.setText("Version 1.1");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(jLabel5)
-                .addContainerGap(93, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addContainerGap())
-        );
 
         main_panel.setBackground(new java.awt.Color(153, 153, 153));
         main_panel.setLayout(new java.awt.CardLayout());
@@ -106,11 +88,11 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "NO", "SO Number", "Nama Foto", "Status"
+                "NO", "Nama Foto", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true
+                false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -121,7 +103,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (jTable.getColumnModel().getColumnCount() > 0) {
             jTable.getColumnModel().getColumn(0).setMinWidth(50);
             jTable.getColumnModel().getColumn(0).setMaxWidth(50);
-            jTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+            jTable.getColumnModel().getColumn(1).setPreferredWidth(150);
         }
 
         btn_cek_status.setText("Cek Status SO");
@@ -147,12 +129,25 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        tf_so.setToolTipText("");
+        tf_so.setHighlighter(null);
+
         buttonGroup.add(jRadio_op);
         jRadio_op.setText("Order Printing");
+        jRadio_op.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadio_opActionPerformed(evt);
+            }
+        });
 
         buttonGroup.add(jRadio_os);
         jRadio_os.setSelected(true);
         jRadio_os.setText("Order Studio");
+        jRadio_os.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadio_osActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Masukan Nomor SO");
 
@@ -160,9 +155,22 @@ public class MainFrame extends javax.swing.JFrame {
         jLabelNotif.setForeground(new java.awt.Color(204, 0, 0));
         jLabelNotif.setText("*so tidak ada di Log Send File");
 
-        jLabel2.setText("Status Sebelum :");
+        label_status_sebelum.setText("Status Sebelum :");
+        label_status_sebelum.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
 
-        jLabel4.setText("Status Sesudah :");
+        label_status_sesudah.setText("Status Sesudah :");
+        label_status_sesudah.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+
+        label_waktu_dikirim.setText("Waktu Dikirim : ");
+
+        label_foto_upload.setText("Total Diupload :");
+
+        btn_history_upload.setText("Cek History Upload");
+        btn_history_upload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_history_uploadActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -173,33 +181,38 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jRadio_op)
+                            .addComponent(tf_so, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jRadio_os))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(jRadio_os)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadio_op))
-                            .addComponent(jTextField_so))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_cek_log)
-                            .addComponent(jCombo_status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_ganti_status, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_cek_status, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btn_cek_log, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                            .addComponent(jCombo_status, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btn_cek_status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_ganti_status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_history_upload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelNotif)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(label_status_so_sebelum, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(label_status_so_sesudah, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(label_status_sebelum)
+                            .addComponent(label_status_sesudah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(label_status_so_sesudah, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(label_status_so_sebelum, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(label_foto_upload, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(label_waktu_dikirim, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabelNotif, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(33, 33, 33))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,74 +220,76 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(4, 4, 4)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btn_cek_status, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_cek_log, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField_so, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(label_status_so_sebelum, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
+                            .addComponent(label_status_sebelum))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
-                            .addComponent(label_status_so_sesudah, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_ganti_status, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCombo_status, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadio_op, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadio_os, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelNotif))
-                .addContainerGap())
+                            .addComponent(label_status_sesudah)
+                            .addComponent(label_status_so_sesudah, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(label_waktu_dikirim)
+                        .addGap(8, 8, 8)
+                        .addComponent(label_foto_upload)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabelNotif))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(4, 4, 4)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(tf_so, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jRadio_os, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jRadio_op, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btn_cek_status, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_cek_log, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jCombo_status, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_ganti_status, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_history_upload, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addGap(6, 6, 6))
         );
+
+        jLabel6.setText("Version 1.3");
 
         javax.swing.GroupLayout panel_cek_log_sendLayout = new javax.swing.GroupLayout(panel_cek_log_send);
         panel_cek_log_send.setLayout(panel_cek_log_sendLayout);
         panel_cek_log_sendLayout.setHorizontalGroup(
             panel_cek_log_sendLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_cek_log_sendLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(panel_cek_log_sendLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_cek_log_sendLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel6))
+                    .addGroup(panel_cek_log_sendLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panel_cek_log_sendLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         panel_cek_log_sendLayout.setVerticalGroup(
             panel_cek_log_sendLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_cek_log_sendLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
                 .addContainerGap())
         );
 
         main_panel.add(panel_cek_log_send, "card2");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("Edit Status SO");
-
-        javax.swing.GroupLayout panel_edit_soLayout = new javax.swing.GroupLayout(panel_edit_so);
-        panel_edit_so.setLayout(panel_edit_soLayout);
-        panel_edit_soLayout.setHorizontalGroup(
-            panel_edit_soLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_edit_soLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addContainerGap(605, Short.MAX_VALUE))
-        );
-        panel_edit_soLayout.setVerticalGroup(
-            panel_edit_soLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_edit_soLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addContainerGap(479, Short.MAX_VALUE))
-        );
-
-        main_panel.add(panel_edit_so, "card3");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -282,19 +297,15 @@ public class MainFrame extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(main_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(main_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(main_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addComponent(main_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -305,20 +316,76 @@ public class MainFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_cek_logActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cek_logActionPerformed
+        jLabelNotif.setVisible(false);
+        label_foto_upload.setVisible(true);
+        label_waktu_dikirim.setVisible(true);
+        get_HistoryUpload();
+        label_status_so_sebelum.setText("");
+        label_status_so_sesudah.setText("");
+        DefaultTableModel model = (DefaultTableModel) jTable.getModel();
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        so = tf_so.getText().toUpperCase().toString();
+        show_logSendFiles();
+    }//GEN-LAST:event_btn_cek_logActionPerformed
+
+    private void btn_ganti_statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ganti_statusActionPerformed
+        jLabelNotif.setVisible(false);
+
+        label_foto_upload.setVisible(false);
+        label_waktu_dikirim.setVisible(false);
+        label_status_so_sebelum.setText("");
+        so = tf_so.getText().toUpperCase().toString();
+        QueryGantiStatus();
+    }//GEN-LAST:event_btn_ganti_statusActionPerformed
+
+    private void btn_cek_statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cek_statusActionPerformed
+        jLabelNotif.setVisible(false);
+        label_status_sebelum.setVisible(false);
+        label_status_sesudah.setText("STATUS :");
+        label_foto_upload.setVisible(false);
+        label_waktu_dikirim.setVisible(false);
+
+        so = tf_so.getText().toUpperCase().toString();
+        
+        get_statusSOSesudah();
+        show_labelStatusSesudah();
+    }//GEN-LAST:event_btn_cek_statusActionPerformed
+
+    private void btn_history_uploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_history_uploadActionPerformed
+        jLabelNotif.setVisible(false);
+        label_foto_upload.setVisible(true);
+        label_waktu_dikirim.setVisible(true);
+        get_HistoryUpload();
+        label_status_so_sebelum.setText("");
+        label_status_so_sesudah.setText("");
+    }//GEN-LAST:event_btn_history_uploadActionPerformed
+
+    private void jRadio_opActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadio_opActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadio_opActionPerformed
+
+    private void jRadio_osActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadio_osActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadio_osActionPerformed
+
     //get log send files
     ArrayList<LogSendFiles> logSendFiles() {
-        String url = "jdbc:mysql://192.168.200.248/jonas_db?zeroDateTimeBehavior=convertToNull";
+        String url = "jdbc:mysql://34.101.91.186/jonas_db?zeroDateTimeBehavior=convertToNull";
         String username = "jonas";
         String password = "t8c4cX7aKJe97F6h";
         ArrayList<LogSendFiles> logFileList = new ArrayList<>();
         try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
-            String queryRead = "SELECT so_number, real_name, photo_status FROM photos_attempt_log WHERE so_number = '" + so + "'";
+            String queryRead = "SELECT real_name, photo_status FROM photos_attempt_log WHERE so_number = '" + so + "'";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(queryRead);
             LogSendFiles sendFiles;
@@ -330,7 +397,7 @@ public class MainFrame extends javax.swing.JFrame {
             } else {
                 do {
                     System.out.println("truelog");
-                    sendFiles = new LogSendFiles(rs.getString("so_number"),
+                    sendFiles = new LogSendFiles(
                             rs.getString("real_name"),
                             rs.getInt("photo_status"));
                     logFileList.add(sendFiles);
@@ -372,16 +439,15 @@ public class MainFrame extends javax.swing.JFrame {
 
             int jmlRow = model.getRowCount();
             row[0] = jmlRow + 1;
-            row[1] = list.get(i).getSo_number();
-            row[2] = list.get(i).getReal_name();
-            row[3] = photoStatus;
+            row[1] = list.get(i).getReal_name();
+            row[2] = photoStatus;
             model.addRow(row);
         }
     }
 //String password = "t8c4cX7aKJe97F6h";
 
     ArrayList<StatusSO> statusSO() {
-        String url = "jdbc:mysql://192.168.200.248/jonas_db?zeroDateTimeBehavior=convertToNull";
+        String url = "jdbc:mysql://34.101.91.186/jonas_db?zeroDateTimeBehavior=convertToNull";
         String username = "jonas";
         String password = "t8c4cX7aKJe97F6h";
 
@@ -398,9 +464,8 @@ public class MainFrame extends javax.swing.JFrame {
                 label_status_so_sebelum.setText("");
                 label_status_so_sesudah.setText("");
             }
-            // rs.first();
+
             do {
-                System.out.println("truelog");
                 statusSO = new StatusSO(
                         rs.getInt("id"),
                         rs.getInt("status_order"),
@@ -430,6 +495,56 @@ public class MainFrame extends javax.swing.JFrame {
 
         for (int i = 0; i < list.size(); i++) {
             statusOrderSesudah = list.get(i).getStatus_order();
+        }
+
+    }
+
+    //history upload
+    ArrayList<ModelHistoryUpload> historyUpload() {
+        String url = "jdbc:mysql://34.101.91.186/jonas_db?zeroDateTimeBehavior=convertToNull";
+        String username = "jonas";
+        String password = "t8c4cX7aKJe97F6h";
+
+        ArrayList<ModelHistoryUpload> historyUploadList = new ArrayList<>();
+        try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
+            String queryRead = "SELECT so_number, created_at, total_file FROM history_upload WHERE so_number = '" + so + "'";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(queryRead);
+            ModelHistoryUpload modelHistoryUpload;
+
+            if (rs.next() == false) {
+                jLabelNotif.setText("SO Tidak Ditemukan!");
+                jLabelNotif.setVisible(true);
+                label_status_so_sebelum.setText("");
+                label_status_so_sesudah.setText("");
+            }
+
+            do {
+                modelHistoryUpload = new ModelHistoryUpload(
+                        rs.getString("so_number"),
+                        rs.getTimestamp("created_at"),
+                        rs.getInt("total_file"));
+                historyUploadList.add(modelHistoryUpload);
+            } while (rs.next() == true);
+
+        } catch (SQLException e) {
+            label_status_so_sebelum.setText("");
+            label_status_so_sesudah.setText("");
+            label_foto_upload.setText("");
+            label_waktu_dikirim.setText("");
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return historyUploadList;
+    }
+
+    public void get_HistoryUpload() {
+        so = tf_so.getText();
+        ArrayList<ModelHistoryUpload> list = historyUpload();
+
+        for (int i = 0; i < list.size(); i++) {
+            label_foto_upload.setText("Waktu Dikirim : " + list.get(i).getCreate_at());
+            label_waktu_dikirim.setText("Total Diupload : " + list.get(i).getTotal_file() + " Foto");
+            System.out.println(list.get(i).getCreate_at());
         }
 
     }
@@ -514,7 +629,7 @@ public class MainFrame extends javax.swing.JFrame {
                     label_status_so_sebelum.setText("Closed");
                     break;
                 case 14:
-                    label_status_so_sebelum.setText("Cancell");
+                    label_status_so_sebelum.setText("Cancel");
                     break;
                 case 15:
                     label_status_so_sesudah.setText("");
@@ -577,7 +692,7 @@ public class MainFrame extends javax.swing.JFrame {
                     label_status_so_sesudah.setText("");
                     break;
             }
-        } else {
+        } else if(jRadio_op.isSelected()) {
             switch (statusOrderSesudah) {
 
                 case 1:
@@ -605,7 +720,7 @@ public class MainFrame extends javax.swing.JFrame {
                     label_status_so_sesudah.setText("Closed");
                     break;
                 case 14:
-                    label_status_so_sesudah.setText("Cancell");
+                    label_status_so_sesudah.setText("Cancel");
                     break;
                 case 15:
                     label_status_so_sesudah.setText("");
@@ -619,13 +734,15 @@ public class MainFrame extends javax.swing.JFrame {
         if (jRadio_os.isSelected()) {
             tableOrder = "order_studios";
 
-        } else {
+        } else if(jRadio_op.isSelected()){
             tableOrder = "order_printings";
+        }else{
+            
         }
     }
 
     public void QueryGantiStatus() {
-        String url = "jdbc:mysql://192.168.200.248/jonas_db?zeroDateTimeBehavior=convertToNull";
+        String url = "jdbc:mysql://34.101.91.186/jonas_db?zeroDateTimeBehavior=convertToNull";
         String username = "jonas";
 //        String password = "";
         String password = "t8c4cX7aKJe97F6h";
@@ -634,69 +751,49 @@ public class MainFrame extends javax.swing.JFrame {
         int select = jCombo_status.getSelectedIndex();
 
         if (select == 0) {
-            get_statusSOSebelum();
-            try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
+            if (statusOrderSebelum != 15) {
+                JOptionPane.showMessageDialog(null, "Status SO sebelumnya belum dikembalikan!");
+            } else {
+                get_statusSOSebelum();
+                try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
 
-                //update status
-                String queryUpdate = "UPDATE jonas_db." + tableOrder + " SET status_order = 8 where so_number='" + so + "'";
-                Statement st = connection.prepareStatement(queryUpdate);
-                st.execute(queryUpdate);
-                JOptionPane.showMessageDialog(null, "Berhasil, Silahkan Lakukan Finish Production di JOM V3");
-                get_statusSOSesudah();
-                show_labelStatusSebelum();
-                show_labelStatusSesudah();
-            } catch (SQLException ex) {
-                label_status_so_sebelum.setText("");
-                label_status_so_sesudah.setText("");
-                JOptionPane.showMessageDialog(null, ex);
+                    //update status
+                    String queryUpdate = "UPDATE jonas_db." + tableOrder + " SET status_order = 8 where so_number='" + so + "'";
+                    Statement st = connection.prepareStatement(queryUpdate);
+                    st.execute(queryUpdate);
+                    JOptionPane.showMessageDialog(null, "Berhasil, Silahkan Lakukan Finish Production di JOM V3");
+                    get_statusSOSesudah();
+                    show_labelStatusSebelum();
+                    show_labelStatusSesudah();
+                } catch (SQLException ex) {
+                    label_status_so_sebelum.setText("");
+                    label_status_so_sesudah.setText("");
+                    JOptionPane.showMessageDialog(null, ex);
+                }
             }
 
         } else if (select == 1) {
-            try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
-                //update status
-                String queryUpdate = "UPDATE jonas_db." + tableOrder + " SET status_order = " + statusOrderSebelum + " where so_number='" + so + "'";
-                Statement st = connection.prepareStatement(queryUpdate);
-                st.execute(queryUpdate);
-                JOptionPane.showMessageDialog(null, "Status Berhasil Dikembalikan!");
-                statusOrderSebelum = 15;
-                get_statusSOSesudah();
-                show_labelStatusSesudah();
-            } catch (SQLException ex) {
-                label_status_so_sebelum.setText("");
-                label_status_so_sesudah.setText("");
-                JOptionPane.showMessageDialog(null, ex);
+            if (statusOrderSebelum == 15) {
+                JOptionPane.showMessageDialog(null, "Ganti Status ke ON PRODUCTION terlebih dahulu!");
+            } else {
+                try (java.sql.Connection connection = DriverManager.getConnection(url, username, password)) {
+                    //update status
+                    String queryUpdate = "UPDATE jonas_db." + tableOrder + " SET status_order = " + statusOrderSebelum + " where so_number='" + so + "'";
+                    Statement st = connection.prepareStatement(queryUpdate);
+                    st.execute(queryUpdate);
+                    JOptionPane.showMessageDialog(null, "Status Berhasil Dikembalikan!");
+                    statusOrderSebelum = 15;
+                    get_statusSOSesudah();
+                    show_labelStatusSesudah();
+                } catch (SQLException ex) {
+                    label_status_so_sebelum.setText("");
+                    label_status_so_sesudah.setText("");
+                    JOptionPane.showMessageDialog(null, ex);
+                }
             }
+
         }
     }
-    private void btn_cek_statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cek_statusActionPerformed
-        jLabelNotif.setVisible(false);
-
-        so = jTextField_so.getText().toUpperCase().toString();
-        get_statusSOSesudah();
-        show_labelStatusSesudah();
-    }//GEN-LAST:event_btn_cek_statusActionPerformed
-
-    private void btn_ganti_statusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ganti_statusActionPerformed
-        jLabelNotif.setVisible(false);
-        label_status_so_sebelum.setText("");
-        so = jTextField_so.getText().toUpperCase().toString();
-        QueryGantiStatus();
-
-    }//GEN-LAST:event_btn_ganti_statusActionPerformed
-
-    private void btn_cek_logActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cek_logActionPerformed
-        jLabelNotif.setVisible(false);
-        label_status_so_sebelum.setText("");
-        label_status_so_sesudah.setText("");
-        DefaultTableModel model = (DefaultTableModel) jTable.getModel();
-        while (model.getRowCount() > 0) {
-            model.removeRow(0);
-        }
-
-        so = jTextField_so.getText().toUpperCase().toString();
-        show_logSendFiles();
-
-    }//GEN-LAST:event_btn_cek_logActionPerformed
 
     /**
      * @param args the command line arguments
@@ -715,20 +812,21 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameLogSendFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameLogSendFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameLogSendFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameLogSendFile.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                new FrameLogSendFile().setVisible(true);
             }
         });
     }
@@ -737,26 +835,26 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btn_cek_log;
     private javax.swing.JButton btn_cek_status;
     private javax.swing.JButton btn_ganti_status;
+    private javax.swing.JButton btn_history_upload;
     private javax.swing.ButtonGroup buttonGroup;
     private javax.swing.JComboBox<String> jCombo_status;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelNotif;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadio_op;
     private javax.swing.JRadioButton jRadio_os;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;
-    private javax.swing.JTextField jTextField_so;
+    private javax.swing.JLabel label_foto_upload;
+    private javax.swing.JLabel label_status_sebelum;
+    private javax.swing.JLabel label_status_sesudah;
     private javax.swing.JLabel label_status_so_sebelum;
     private javax.swing.JLabel label_status_so_sesudah;
+    private javax.swing.JLabel label_waktu_dikirim;
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel panel_cek_log_send;
-    private javax.swing.JPanel panel_edit_so;
+    private javax.swing.JTextField tf_so;
     // End of variables declaration//GEN-END:variables
 }
